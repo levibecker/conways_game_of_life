@@ -16,21 +16,14 @@ class TestRun(unittest.TestCase):
         self.board.set_entity(0, 8)
         self.board.set_entity(8, 9)
 
-    def test_initial_value(self ):
+    def test_initial_value(self):
         init_setup = Game(3, 4)
         self.assertEqual(init_setup.heigth, 3)
         self.assertEqual(init_setup.width, 4)
         expected_map = np.array([
-            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            [0, 0, 0, 0],
+            [0, 0, 0, 0],
+            [0, 0, 0, 0]
         ])
         self.assertTrue((expected_map == init_setup.map).all())
 
