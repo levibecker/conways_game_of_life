@@ -2,11 +2,24 @@ import unittest
 from run import Game
 
 class TestRun(unittest.TestCase):
+
+    def setUp(self):
+        unittest.TestCase.setUp(self)
+        self.board = Game(10,10)
+        self.board.set_entity(6, 5)
+        self.board.set_entity(4, 6)
+        self.board.set_entity(5, 6)
+        self.board.set_entity(5, 7)
+        self.board.set_entity(6, 7)
+        self.board.set_entity(0,9)
+        self.board.set_entity(0,8)
+        self.board.set_entity(8,9)
+        self.board.print_map()
+
     def test_return_neighbours(self):
-        board = Game(10,10)
         #first corner case
         the_cell = (0,0)
-        produced_neighbours = board.return_neighbours(the_cell[0], the_cell[1])
+        produced_neighbours = self.board.return_neighbours(the_cell[0], the_cell[1])
         expected_neighbours = [
         (9, 9),
         (9, 0),
@@ -20,7 +33,7 @@ class TestRun(unittest.TestCase):
         self.assertEqual(produced_neighbours, expected_neighbours)
         #second corner case
         the_cell = (9,9)
-        produced_neighbours = board.return_neighbours(the_cell[0], the_cell[1])
+        produced_neighbours = self.board.return_neighbours(the_cell[0], the_cell[1])
         expected_neighbours = [
         (8, 8),
         (8, 9),
@@ -32,8 +45,104 @@ class TestRun(unittest.TestCase):
         (0, 0)
         ]
         self.assertEqual(produced_neighbours, expected_neighbours)
+        #third corner case
+        the_cell = (0,9)
+        produced_neighbours = self.board.return_neighbours(the_cell[0], the_cell[1])
+        expected_neighbours = [
+        (9, 8),
+        (9, 9),
+        (9, 0),
+        (0, 8),
+        (0, 0),
+        (1, 8),
+        (1, 9),
+        (1, 0)
+        ]
+        self.assertEqual(produced_neighbours, expected_neighbours)
+        #fourth corner case
+        the_cell = (9,0)
+        produced_neighbours = self.board.return_neighbours(the_cell[0], the_cell[1])
+        expected_neighbours = [
+        (8, 9),
+        (8, 0),
+        (8, 1),
+        (9, 9),
+        (9, 1),
+        (0, 9),
+        (0, 0),
+        (0, 1)
+        ]
+        self.assertEqual(produced_neighbours, expected_neighbours)
+        #mid map case
+        the_cell = (5,5)
+        produced_neighbours = self.board.return_neighbours(the_cell[0], the_cell[1])
+        expected_neighbours = [
+        (4, 4),
+        (4, 5),
+        (4, 6),
+        (5, 4),
+        (5, 6),
+        (6, 4),
+        (6, 5),
+        (6, 6)
+        ]
+        self.assertEqual(produced_neighbours, expected_neighbours)
 
+    def test_number_of_neigbours(self):
+        #middle case - dead cell
+        the_cell = (5,5)
+        produced_sum = self.board.number_of_neigbours(the_cell[0], the_cell[1])
+        expected_sum = 3
+        self.assertEqual(produced_sum, expected_sum)
 
+        #middle case 2 - zero neigbours
+        the_cell = (1,1)
+        produced_sum = self.board.number_of_neigbours(the_cell[0], the_cell[1])
+        expected_sum = 0
+        self.assertEqual(produced_sum, expected_sum)
+
+        #middle case 3 - alive cell
+        the_cell = (5,7)
+        produced_sum = self.board.number_of_neigbours(the_cell[0], the_cell[1])
+        expected_sum = 3
+        self.assertEqual(produced_sum, expected_sum)
+
+        #corner case - sum over board
+        the_cell = (9,8)
+        produced_sum = self.board.number_of_neigbours(the_cell[0], the_cell[1])
+        expected_sum = 3
+        self.assertEqual(produced_sum, expected_sum)
+
+    def test_populate_or_die(self):
+        #middle case - a dead cell gonna be born
+        the_cell = (5,5)
+        produced_result = self.board.populate_or_die(the_cell[0], the_cell[1])
+        expected_result = 1
+        self.assertEqual(produced_result, expected_result)
+
+        #middle case - a dead cell gonna be dead
+        the_cell = (1,1)
+        produced_result = self.board.populate_or_die(the_cell[0], the_cell[1])
+        expected_result = 0
+        self.assertEqual(produced_result, expected_result)
+
+        #middle case - an alive cell gonna live
+        the_cell = (5,7)
+        produced_result = self.board.populate_or_die(the_cell[0], the_cell[1])
+        expected_result = 1
+        self.assertEqual(produced_result, expected_result)
+
+        #middle case - an alive cell gonna die (overpopulation)
+        the_cell = (5,6)
+        produced_result = self.board.populate_or_die(the_cell[0], the_cell[1])
+        expected_result = 0
+        self.assertEqual(produced_result, expected_result)
+
+        #middle case - an alive cell gonna die (solitude)
+        the_cell = (8,9)
+        produced_result = self.board.populate_or_die(the_cell[0], the_cell[1])
+        expected_result = 0
+        self.assertEqual(produced_result, expected_result)
 
 if __name__ == '__main__':
     unittest.main()

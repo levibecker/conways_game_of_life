@@ -32,7 +32,7 @@ class Game:
         logging.debug(f"point {y}, x = {x} has 8 neigbours which are: {neighbours}")
         return neighbours
 
-    def neighbours_sum(self, y, x):
+    def number_of_neigbours(self, y, x):
         """
         calculate how many cells are populated in the nearest neighbour of the choosen cell
         """
@@ -42,7 +42,7 @@ class Game:
             y, x = neighbour
             values.append(self.map[y][x])
         number_of_neighbours = sum(values)
-        logging.debug(f"point y = {y}, x = {x} has sum of neigbours equal to {sum_of_neighbours}")
+        logging.debug(f"point y = {y}, x = {x} has sum of neigbours equal to {number_of_neighbours}")
         return number_of_neighbours
 
     def populate_or_die(self, y, x):
@@ -52,7 +52,7 @@ class Game:
         Any live cell with more than three live neighbours dies, as if by overpopulation.
         Any dead cell with exactly three live neighbours becomes a live cell, as if by reproduction.
         """
-        sum_of_neighbours = self.neighbours_sum(y, x)
+        sum_of_neighbours = self.number_of_neigbours(y, x)
         is_alive = self.map[y][x]
 
         if is_alive:
@@ -100,6 +100,6 @@ if __name__ == "__main__":
     game.set_entity(5, 7)
     game.set_entity(6, 7)
     game.print_map()
-    for _ in range(50):
-        game.map = game.calculate_next_state()
-        game.print_map()
+    # for _ in range(50):
+    #     game.map = game.calculate_next_state()
+    #     game.print_map()
