@@ -1,7 +1,7 @@
 import numpy as np
 import logging
 
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=logging.ERROR)
 
 class Game:
     def __init__(self, heigth, width):
