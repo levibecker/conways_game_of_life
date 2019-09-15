@@ -76,13 +76,12 @@ class Game:
         be populated or killed in the next state of map
         and return new state based on that information
         """
-        map = []
-        for y in range(self.heigth):
-            row = []
-            for x in range(self.width):
-                row.append(self.populate_or_die(y,x))
-            map.append(row)
-        return np.array(map)
+        xs = range(self.width)
+        ys = range(self.heigth)
+        new_map = np.array([
+        [self.populate_or_die(y,x) for x in xs] for y in ys
+        ])
+        return new_map
 
     def print_map(self):
         """
