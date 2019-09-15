@@ -3,18 +3,6 @@ import logging
 
 logging.basicConfig(level=logging.DEBUG)
 
-def increment(number):
-    """
-    function that returns incremented number
-
-    arguments:
-        number - a whole number to incremet
-    """
-    if isinstance(number, int):
-        return number + 1
-    else:
-        return 'you can only increment whole numbers!'
-
 class Game:
     def __init__(self, heigth, width):
         self.heigth = heigth
@@ -23,12 +11,15 @@ class Game:
 
     def instantiate_map(self):
         self.map = np.zeros((self.heigth, self.width), dtype=int)
+        logging.debug("map instantieted")
 
     def set_entity(self, y, x):
         self.map[y][x] = 1
+        logging.debug(f"entity set on y = {y}, x = {x}")
 
     def kill_entity(self, y, x):
         self.map[y][x] = 0
+        logging.debug(f"entity killed on y = {y}, x = {x}")
 
     def return_neighbours(self, y, x):
         """
@@ -38,6 +29,7 @@ class Game:
         """
         neighbours = [(a % self.heigth, b % self.width) for a in (y-1, y, y+1) for b in (x-1, x, x+1)]
         neighbours.remove((y % self.heigth, x % self.width))
+        logging.debug(f"point {y}, x = {x} has 8 neigbours which are: {neighbours}")
         return neighbours
 
     def neighbours_sum(self, y, x):
@@ -49,7 +41,9 @@ class Game:
         for neighbour in neighbours:
             y, x = neighbour
             values.append(self.map[y][x])
-        return sum(values)
+        number_of_neighbours = sum(values)
+        logging.debug(f"point y = {y}, x = {x} has sum of neigbours equal to {sum_of_neighbours}")
+        return number_of_neighbours
 
     def populate_or_die(self, y, x):
         """
@@ -63,13 +57,17 @@ class Game:
 
         if is_alive:
             if sum_of_neighbours not in (2,3):
+                logging.debug(f"cell y = {y}, x = {x} has died")
                 return 0
             else:
+                logging.debug(f"cell y = {y}, x = {x} stayed alive")
                 return 1
         else:
             if sum_of_neighbours == 3:
+                logging.debug(f"cell y = {y}, x = {x} has been born")
                 return 1
             else:
+                logging.debug(f"cell y = {y}, x = {x} is still dead")
                 return 0
 
     def calculate_next_state(self):
