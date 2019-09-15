@@ -47,10 +47,10 @@ class TestRun(unittest.TestCase):
         self.assertTrue((produced_result == expected_result).all())
 
     def test_set_entity(self):
-        self.board.set_entity(0,0)
+        self.board.set_entity(0,2)
         produced_result = self.board.map
         expected_result = np.array([
-            [1, 0, 0, 0, 0, 0, 0, 0, 1, 1],
+            [0, 0, 1, 0, 0, 0, 0, 0, 1, 1],
             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
