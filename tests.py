@@ -1,6 +1,6 @@
 import unittest
 import numpy as np
-from run import Game
+from game.core import Game
 
 class TestRun(unittest.TestCase):
 
@@ -226,7 +226,6 @@ class TestRun(unittest.TestCase):
         ])
 
         self.assertTrue((produced_result == expected_result).all())
-
 
 if __name__ == '__main__':
     unittest.main()
