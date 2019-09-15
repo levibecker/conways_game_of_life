@@ -1,3 +1,8 @@
+import numpy as np
+import logging
+
+logging.basicConfig(level=logging.DEBUG)
+
 def increment(number):
     """
     function that returns incremented number
@@ -9,3 +14,70 @@ def increment(number):
         return number + 1
     else:
         return 'you can only increment whole numbers!'
+
+class Game:
+    def __init__(self, heigth, width):
+        self.heigth = heigth
+        self.width = width
+        self.instantiate_map()
+
+    def instantiate_map(self):
+        self.map = np.zeros((self.width, self.heigth), dtype=int)
+
+    def return_neighbours(self, x, y):
+        neighbours = [(a % self.width, b % self.heigth) for a in (x-1, x, x+1) for b in (y-1, y, y+1)]
+        neighbours.remove((x % self.width, y % self.heigth))
+        return neighbours
+
+    def neighbours_sum(self, x, y):
+        neighbours = self.return_neighbours(x, y)
+        values = []
+        for neighbour in neighbours:
+            x, y = neighbour
+            values.append(self.map[x][y])
+        return sum(values)
+
+    def born_or_kill(self, x, y):
+        sum_of_neighbours = self.neighbours_sum(x, y)
+        is_alive = self.map[x][y]
+
+        if is_alive:
+            if sum_of_neighbours not in (2,3):
+                return 0
+            else:
+                return 1
+        else:
+            if sum_of_neighbours == 3:
+                return 1
+            else:
+                return 0
+
+    def calculate_next_state(self):
+        map = []
+        for x in range(self.width):
+            row = []
+            for y in range(self.heigth):
+                row.append(self.born_or_kill(x,y))
+            map.append(row)
+        return np.array(map)
+
+    def print_map(self):
+        for row in self.map:
+            print(" ".join([str(value) for value in row]))
+        print("---")
+
+    def set_entity(self, x, y):
+        self.map[x][y] = 1
+
+    def kill_entity(self, x, y):
+        self.map[x][y] = 0
+
+if __name__ == "__main__":
+    game = Game(10,10)
+    for i in range(3):
+        game.set_entity(5, i+2)
+
+    game.print_map()
+    for _ in range(10):
+        game.map = game.calculate_next_state()
+        game.print_map()
