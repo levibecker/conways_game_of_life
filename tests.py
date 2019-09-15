@@ -1,19 +1,20 @@
 import unittest
+import numpy as np
 from run import Game
 
 class TestRun(unittest.TestCase):
 
     def setUp(self):
         unittest.TestCase.setUp(self)
-        self.board = Game(10,10)
+        self.board = Game(10, 10)
         self.board.set_entity(6, 5)
         self.board.set_entity(4, 6)
         self.board.set_entity(5, 6)
         self.board.set_entity(5, 7)
         self.board.set_entity(6, 7)
-        self.board.set_entity(0,9)
-        self.board.set_entity(0,8)
-        self.board.set_entity(8,9)
+        self.board.set_entity(0, 9)
+        self.board.set_entity(0, 8)
+        self.board.set_entity(8, 9)
         self.board.print_map()
 
     def test_return_neighbours(self):
@@ -143,6 +144,26 @@ class TestRun(unittest.TestCase):
         produced_result = self.board.populate_or_die(the_cell[0], the_cell[1])
         expected_result = 0
         self.assertEqual(produced_result, expected_result)
+
+    def test_calculate_next_state(self):
+        produced_result = self.board.calculate_next_state()
+        expected_result = np.array([
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 1, 1, 0, 0],
+        [0, 0, 0, 0, 0, 1, 0, 1, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 1, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 1, 1]
+        ]
+        )
+
+        #comparing two arrays produce array of booleans
+        self.assertTrue((produced_result == expected_result).all())
+
 
 if __name__ == '__main__':
     unittest.main()

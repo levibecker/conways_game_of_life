@@ -93,13 +93,16 @@ class Game:
         print("---")
 
 if __name__ == "__main__":
-    game = Game(10,10)
+    game = Game(10, 10)
     game.set_entity(6, 5)
     game.set_entity(4, 6)
     game.set_entity(5, 6)
     game.set_entity(5, 7)
     game.set_entity(6, 7)
+    game.set_entity(0, 9)
+    game.set_entity(0, 8)
+    game.set_entity(8, 9)
     game.print_map()
     # for _ in range(50):
-    #     game.map = game.calculate_next_state()
-    #     game.print_map()
+    game.map = game.calculate_next_state()
+    game.print_map()
