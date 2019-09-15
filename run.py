@@ -24,22 +24,22 @@ class Game:
     def instantiate_map(self):
         self.map = np.zeros((self.heigth, self.width), dtype=int)
 
-    def return_neighbours(self, x, y):
+    def return_neighbours(self, y, x):
         neighbours = [(a % self.heigth, b % self.width) for a in (x-1, x, x+1) for b in (y-1, y, y+1)]
         neighbours.remove((x % self.heigth, y % self.width))
         return neighbours
 
-    def neighbours_sum(self, x, y):
-        neighbours = self.return_neighbours(x, y)
+    def neighbours_sum(self, y, x):
+        neighbours = self.return_neighbours(y, x)
         values = []
         for neighbour in neighbours:
             x, y = neighbour
-            values.append(self.map[x][y])
+            values.append(self.map[y][x])
         return sum(values)
 
-    def born_or_kill(self, x, y):
-        sum_of_neighbours = self.neighbours_sum(x, y)
-        is_alive = self.map[x][y]
+    def born_or_kill(self, y, x):
+        sum_of_neighbours = self.neighbours_sum(y, x)
+        is_alive = self.map[y][x]
 
         if is_alive:
             if sum_of_neighbours not in (2,3):
@@ -54,10 +54,10 @@ class Game:
 
     def calculate_next_state(self):
         map = []
-        for x in range(self.heigth):
+        for y in range(self.heigth):
             row = []
-            for y in range(self.width):
-                row.append(self.born_or_kill(x,y))
+            for x in range(self.width):
+                row.append(self.born_or_kill(y,x))
             map.append(row)
         return np.array(map)
 
@@ -66,18 +66,18 @@ class Game:
             print(" ".join([str(value) for value in row]))
         print("---")
 
-    def set_entity(self, x, y):
-        self.map[x][y] = 1
+    def set_entity(self, y, x):
+        self.map[y][x] = 1
 
-    def kill_entity(self, x, y):
-        self.map[x][y] = 0
+    def kill_entity(self, y, x):
+        self.map[y][x] = 0
 
 if __name__ == "__main__":
     game = Game(10,10)
-    game.set_entity(5, 5)
     game.set_entity(6, 5)
-    game.set_entity(6, 6)
-    game.set_entity(4, 7)
+    game.set_entity(4, 6)
+    game.set_entity(5, 6)
+    game.set_entity(5, 7)
     game.set_entity(6, 7)
     game.print_map()
     for _ in range(50):
