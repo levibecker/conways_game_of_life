@@ -31,11 +31,19 @@ class Game:
         self.map[y][x] = 0
 
     def return_neighbours(self, y, x):
+        """
+        return indexes of the neigbours of the choosen cell
+        every cell has eight neighbours, which are the cells that are
+        horizontally, vertically, or diagonally adjacent
+        """
         neighbours = [(a % self.heigth, b % self.width) for a in (y-1, y, y+1) for b in (x-1, x, x+1)]
         neighbours.remove((y % self.heigth, x % self.width))
         return neighbours
 
     def neighbours_sum(self, y, x):
+        """
+        calculate how many cells are populated in the nearest neighbour of the choosen cell
+        """
         neighbours = self.return_neighbours(y, x)
         values = []
         for neighbour in neighbours:
@@ -43,7 +51,13 @@ class Game:
             values.append(self.map[y][x])
         return sum(values)
 
-    def born_or_kill(self, y, x):
+    def populate_or_die(self, y, x):
+        """
+        Any live cell with fewer than two live neighbours dies, as if by underpopulation.
+        Any live cell with two or three live neighbours lives on to the next generation.
+        Any live cell with more than three live neighbours dies, as if by overpopulation.
+        Any dead cell with exactly three live neighbours becomes a live cell, as if by reproduction.
+        """
         sum_of_neighbours = self.neighbours_sum(y, x)
         is_alive = self.map[y][x]
 
@@ -59,15 +73,23 @@ class Game:
                 return 0
 
     def calculate_next_state(self):
+        """
+        checking every cell of the map to determine if it should
+        be populated or killed in the next state of map
+        and return new state based on that information
+        """
         map = []
         for y in range(self.heigth):
             row = []
             for x in range(self.width):
-                row.append(self.born_or_kill(y,x))
+                row.append(self.populate_or_die(y,x))
             map.append(row)
         return np.array(map)
 
     def print_map(self):
+        """
+        printing current state of the game to the console
+        """
         for row in self.map:
             print(" ".join([str(value) for value in row]))
         print("---")
