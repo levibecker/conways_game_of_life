@@ -22,11 +22,11 @@ class Game:
         self.instantiate_map()
 
     def instantiate_map(self):
-        self.map = np.zeros((self.width, self.heigth), dtype=int)
+        self.map = np.zeros((self.heigth, self.width), dtype=int)
 
     def return_neighbours(self, x, y):
-        neighbours = [(a % self.width, b % self.heigth) for a in (x-1, x, x+1) for b in (y-1, y, y+1)]
-        neighbours.remove((x % self.width, y % self.heigth))
+        neighbours = [(a % self.heigth, b % self.width) for a in (x-1, x, x+1) for b in (y-1, y, y+1)]
+        neighbours.remove((x % self.heigth, y % self.width))
         return neighbours
 
     def neighbours_sum(self, x, y):
@@ -54,9 +54,9 @@ class Game:
 
     def calculate_next_state(self):
         map = []
-        for x in range(self.width):
+        for x in range(self.heigth):
             row = []
-            for y in range(self.heigth):
+            for y in range(self.width):
                 row.append(self.born_or_kill(x,y))
             map.append(row)
         return np.array(map)
@@ -74,10 +74,12 @@ class Game:
 
 if __name__ == "__main__":
     game = Game(10,10)
-    for i in range(3):
-        game.set_entity(5, i+2)
-
+    game.set_entity(5, 5)
+    game.set_entity(6, 5)
+    game.set_entity(6, 6)
+    game.set_entity(4, 7)
+    game.set_entity(6, 7)
     game.print_map()
-    for _ in range(10):
+    for _ in range(50):
         game.map = game.calculate_next_state()
         game.print_map()
